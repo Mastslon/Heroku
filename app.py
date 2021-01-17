@@ -8,6 +8,19 @@ import os
 from flask import current_app, render_template,request,redirect,url_for, abort
 from flask_mysqldb import MySQL
 
+
+
+
+from datetime import datetime
+from flask_mysqldb import MySQL
+from flask import current_app, render_template,request,redirect,url_for, abort
+from random import randint
+from passlib.hash import pbkdf2_sha256 as hasher
+from flask_login import LoginManager, login_user, current_user
+from flask import Flask, session, redirect, url_for, escape, request
+
+
+
 class Database:
     def __init__(self):
         print("created")
@@ -87,71 +100,6 @@ class Database:
 
 
 
-
-
-lm = LoginManager()
-@lm.user_loader
-def load_user():
-    return "test"
-
-app = Flask(__name__)
-
-def create_app():
-    app.secret_key = os.urandom(24)
-
-    app.config["MYSQL_USER"] = 'b0dd62d51c1994'
-    app.config["MYSQL_PASSWORD"] = '589ca3ad'
-    app.config["MYSQL_HOST"] = 'eu-cdbr-west-03.cleardb.net'
-    app.config["MYSQL_DB"] = 'heroku_1fed0ad0dd81591'
-    app.config.from_object("settings")
-
-    app.add_url_rule("/", view_func=load_user)
-    app.add_url_rule("/posts/<int:post_key>", view_func=post_page)
-    app.add_url_rule("/post", view_func=post_page)
-    app.add_url_rule("/new_post", view_func=create_post_page, methods=["GET","POST"])
-    app.add_url_rule("/register", view_func=register_page, methods=["GET","POST"])
-    app.add_url_rule("/register_teachers", view_func=Tregister_page, methods=["GET","POST"])
-    app.add_url_rule("/login", view_func=login_page, methods=["GET","POST"])
-    app.add_url_rule("/about_us", view_func=about_page)
-    app.add_url_rule("/test", view_func=read_page)
-    app.add_url_rule("/logout", view_func=out_page)
-    app.add_url_rule("/delete", view_func=delete_page)
-    app.add_url_rule("/add_item", view_func=add_item, methods=["GET","POST"])
-    app.add_url_rule("/new_password", view_func=change_password, methods=["GET","POST"])
-    app.add_url_rule("/Update_post/<int:post_key>", view_func=update_post, methods=["GET","POST"])
-    app.add_url_rule("/delete_post/<int:post_key>", view_func=post_delete_page, methods=["GET","POST"])
-
-    
-    return app
-
-if __name__ == "__main__":
-    app = create_app()
-    lm.init_app(app)
-    db = MySQL(app)
-    app.config["db"] = db
-    database = Database()
-    app.run(host="0.0.0.0", port=8080, debug=True)
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-from datetime import datetime
-from flask_mysqldb import MySQL
-from flask import current_app, render_template,request,redirect,url_for, abort
-from random import randint
-from passlib.hash import pbkdf2_sha256 as hasher
-from flask_login import LoginManager, login_user, current_user
-from flask import Flask, session, redirect, url_for, escape, request
 
 database = Database()
 
@@ -430,4 +378,82 @@ def post_delete_page(post_key):
     cur.execute("DELETE FROM posts WHERE posts.Post_id= %s"%(id))
     db.connection.commit()
     return redirect(url_for("home_page"))
+
+
+
+
+
+
+def clear_test():
+    return render_template("about.html")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+lm = LoginManager()
+@lm.user_loader
+def load_user():
+    return "test"
+
+app = Flask(__name__)
+
+def create_app():
+    app.secret_key = os.urandom(24)
+
+    app.config["MYSQL_USER"] = 'b0dd62d51c1994'
+    app.config["MYSQL_PASSWORD"] = '589ca3ad'
+    app.config["MYSQL_HOST"] = 'eu-cdbr-west-03.cleardb.net'
+    app.config["MYSQL_DB"] = 'heroku_1fed0ad0dd81591'
+    app.config.from_object("settings")
+
+    app.add_url_rule("/", view_func=clear_test)
+    app.add_url_rule("/posts/<int:post_key>", view_func=post_page)
+    app.add_url_rule("/post", view_func=post_page)
+    app.add_url_rule("/new_post", view_func=create_post_page, methods=["GET","POST"])
+    app.add_url_rule("/register", view_func=register_page, methods=["GET","POST"])
+    app.add_url_rule("/register_teachers", view_func=Tregister_page, methods=["GET","POST"])
+    app.add_url_rule("/login", view_func=login_page, methods=["GET","POST"])
+    app.add_url_rule("/about_us", view_func=about_page)
+    app.add_url_rule("/test", view_func=read_page)
+    app.add_url_rule("/logout", view_func=out_page)
+    app.add_url_rule("/delete", view_func=delete_page)
+    app.add_url_rule("/add_item", view_func=add_item, methods=["GET","POST"])
+    app.add_url_rule("/new_password", view_func=change_password, methods=["GET","POST"])
+    app.add_url_rule("/Update_post/<int:post_key>", view_func=update_post, methods=["GET","POST"])
+    app.add_url_rule("/delete_post/<int:post_key>", view_func=post_delete_page, methods=["GET","POST"])
+
+    
+    return app
+
+if __name__ == "__main__":
+    app = create_app()
+    lm.init_app(app)
+    db = MySQL(app)
+    app.config["db"] = db
+    database = Database()
+    app.run(host="0.0.0.0", port=8080, debug=True)
+
+    
+
+
+
+
+
+
+
+
+
 

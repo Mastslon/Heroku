@@ -419,7 +419,7 @@ def create_app():
     app.config["MYSQL_DB"] = 'heroku_1fed0ad0dd81591'
     app.config.from_object("settings")
 
-    app.add_url_rule("/", view_func=clear_test)
+    app.add_url_rule("/", view_func=home_page)
     app.add_url_rule("/posts/<int:post_key>", view_func=post_page)
     app.add_url_rule("/post", view_func=post_page)
     app.add_url_rule("/new_post", view_func=create_post_page, methods=["GET","POST"])
